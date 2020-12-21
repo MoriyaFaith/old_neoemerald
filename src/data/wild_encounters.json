@@ -85,7 +85,7 @@
               {
                 "min_level": 2,
                 "max_level": 2,
-                "species": "SPECIES_SCYTHER"
+                "species": "SPECIES_WURMPLE"
               },
               {
                 "min_level": 2,
@@ -124,12 +124,12 @@
               },
               {
                 "min_level": 2,
-                "max_level": 2,
+                "max_level": 7,
                 "species": "SPECIES_ZIGZAGOON"
               },
               {
                 "min_level": 2,
-                "max_level": 2,
+                "max_level": 1,
                 "species": "SPECIES_ZIGZAGOON"
               },
               {
@@ -2284,7 +2284,7 @@
               },
               {
                 "min_level": 25,
-                "max_level": 25,
+                "max_level": 19,
                 "species": "SPECIES_PIKACHU"
               },
               {
@@ -7023,7 +7023,7 @@
               {
                 "min_level": 27,
                 "max_level": 27,
-                "species": "SPECIES_WOBBUFFET"
+                "species": "SPECIES_SCYTHER"
               },
               {
                 "min_level": 25,
@@ -7033,7 +7033,7 @@
               {
                 "min_level": 27,
                 "max_level": 27,
-                "species": "SPECIES_WOBBUFFET"
+                "species": "SPECIES_SCYTHER"
               },
               {
                 "min_level": 27,
@@ -7043,7 +7043,7 @@
               {
                 "min_level": 29,
                 "max_level": 29,
-                "species": "SPECIES_WOBBUFFET"
+                "species": "SPECIES_SCYTHER"
               }
             ]
           },
@@ -7264,7 +7264,7 @@
                 "species": "SPECIES_DODUO"
               },
               {
-                "min_level": 29,
+                "min_level": 28,
                 "max_level": 29,
                 "species": "SPECIES_GLOOM"
               },
