@@ -817,6 +817,7 @@ gBattleAnims_General::
 	.4byte General_FormChange
 	.4byte General_SlideOffScreen
 	.4byte General_RestoreBg
+	.4byte General_Thunderstorm
 
 	.align 2
 gBattleAnims_Special::
@@ -21093,12 +21094,6 @@ SpiderWebThread:
 	return
 
 Move_RAZOR_WIND:
-	choosetwoturnanim RazorWindSetUp, RazorWindUnleash
-RazorWindEnd:
-	waitforvisualfinish
-	end
-
-RazorWindSetUp:
 	loadspritegfx ANIM_TAG_GUST
 	playsewithpan SE_M_GUST, SOUND_PAN_ATTACKER
 	createsprite gRazorWindTornadoSpriteTemplate, ANIM_ATTACKER, 2, 32, 0, 16, 16, 0, 7, 40
@@ -21106,8 +21101,7 @@ RazorWindSetUp:
 	createsprite gRazorWindTornadoSpriteTemplate, ANIM_ATTACKER, 2, 32, 0, 16, 16, 170, 7, 40
 	waitforvisualfinish
 	playsewithpan SE_M_GUST2, SOUND_PAN_ATTACKER
-	goto RazorWindEnd
-
+	goto RazorWindUnleash
 RazorWindUnleash:
 	loadspritegfx ANIM_TAG_AIR_WAVE_2
 	loadspritegfx ANIM_TAG_IMPACT
@@ -21129,6 +21123,9 @@ RazorWindUnleash:
 	clearmonbg ANIM_TARGET
 	blendoff
 	goto RazorWindEnd
+RazorWindEnd:
+	waitforvisualfinish
+	end
 
 Move_DISABLE:
 	loadspritegfx ANIM_TAG_SPARKLE_4
@@ -24120,6 +24117,58 @@ General_Sandstorm:
 
 General_Hail:
 	goto Move_HAIL
+
+General_Thunderstorm:
+	loadspritegfx ANIM_TAG_RAIN_DROPS
+	loadspritegfx ANIM_TAG_LIGHTNING
+	fadetobg BG_THUNDER
+	waitbgfadeout
+	createvisualtask AnimTask_StartSlidingBg, 5, -256, 0, 1, -1
+	waitbgfadein
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createvisualtask AnimTask_BlendBattleAnimPal, 10, 0x781, 2, 0, 4, RGB_BLACK
+	delay 5
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 48, -66
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 48, -50
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 48, -38
+	delay 20
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -32, -36
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -32, -20
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -32, 12
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
+	delay 5
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 36, -28
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 36, -12
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 36, 20
+	delay 30
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createvisualtask AnimTask_CreateRaindrops, 2, 0, 3, 60
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 128, -58
+	playsewithpan SE_M_TRI_ATTACK2, SOUND_PAN_TARGET
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 128, -42
+	delay 1
+	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 128, -30
+	delay 10
+	createvisualtask AnimTask_BlendBattleAnimPal, 10, 0x781, 2, 4, 0, RGB_BLACK
+	waitforvisualfinish
+	restorebg
+	waitbgfadeout
+	setarg 7, 0xFFFF
+	waitbgfadein
+	end
 
 General_LeechSeedDrain:
 	createvisualtask AnimTask_GetBattlersFromArg, 5

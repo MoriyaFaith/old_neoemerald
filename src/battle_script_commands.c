@@ -4423,7 +4423,8 @@ static void Cmd_playanimation(void)
     else if (gBattlescriptCurrInstr[2] == B_ANIM_RAIN_CONTINUES
              || gBattlescriptCurrInstr[2] == B_ANIM_SUN_CONTINUES
              || gBattlescriptCurrInstr[2] == B_ANIM_SANDSTORM_CONTINUES
-             || gBattlescriptCurrInstr[2] == B_ANIM_HAIL_CONTINUES)
+             || gBattlescriptCurrInstr[2] == B_ANIM_HAIL_CONTINUES
+             || gBattlescriptCurrInstr[2] == B_ANIM_STORM_CONTINUES)
     {
         BtlController_EmitBattleAnimation(0, gBattlescriptCurrInstr[2], *argumentPtr);
         MarkBattlerForControllerExec(gActiveBattler);
@@ -9569,6 +9570,22 @@ static void Cmd_weatherdamage(void)
                     gBattleMoveDamage = 1;
             }
         }
+        if (gBattleWeather & WEATHER_THUNDERSTORM_ANY)
+        {
+            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ELECTRIC)
+                && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+                && ability != ABILITY_LIGHTNING_ROD
+                && ability != ABILITY_MOTOR_DRIVE
+                && ability != ABILITY_STATIC
+                && ability != ABILITY_VOLT_ABSORB
+                && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
+                && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOOGLES)
+            {
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+            }
+        }
     }
 
     gBattlescriptCurrInstr++;
@@ -10903,6 +10920,21 @@ static void Cmd_setminimize(void)
 static void Cmd_sethail(void)
 {
     if (!TryChangeBattleWeather(gBattlerAttacker, ENUM_WEATHER_HAIL, FALSE))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+    }
+    else
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+    }
+
+    gBattlescriptCurrInstr++;
+}
+
+static void Cmd_setthunderstorm(void)
+{
+    if (!TryChangeBattleWeather(gBattlerAttacker, ENUM_WEATHER_THUNDERSTORM, FALSE))
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;

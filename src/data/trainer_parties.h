@@ -3370,21 +3370,21 @@ static const struct TrainerMonItemCustomMoves sParty_Roxanne1[] = {
     .lvl = 12,
     .species = SPECIES_GEODUDE,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_TACKLE, MOVE_DEFENSE_CURL, MOVE_ROCK_THROW, MOVE_ROCK_TOMB}
+    .moves = {MOVE_ROCK_THROW, MOVE_MAGNITUDE, MOVE_ROCK_POLISH, MOVE_ROCK_TOMB}
     },
     {
     .iv = 100,
-    .lvl = 12,
-    .species = SPECIES_GEODUDE,
+    .lvl = 13,
+    .species = SPECIES_ARON,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_TACKLE, MOVE_DEFENSE_CURL, MOVE_ROCK_THROW, MOVE_ROCK_TOMB}
+    .moves = {MOVE_HEADBUTT, MOVE_IRON_DEFENSE, MOVE_METAL_CLAW, MOVE_ROCK_TOMB}
     },
     {
     .iv = 200,
     .lvl = 15,
     .species = SPECIES_NOSEPASS,
-    .heldItem = ITEM_ORAN_BERRY,
-    .moves = {MOVE_BLOCK, MOVE_HARDEN, MOVE_TACKLE, MOVE_ROCK_TOMB}
+    .heldItem = ITEM_QUICK_CLAW,
+    .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_ROCK_POLISH, MOVE_ROCK_TOMB}
     }
 };
 
@@ -3394,21 +3394,21 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1[] = {
     .lvl = 16,
     .species = SPECIES_MACHOP,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_KARATE_CHOP, MOVE_LOW_KICK, MOVE_SEISMIC_TOSS, MOVE_BULK_UP}
+    .moves = {MOVE_KARATE_CHOP, MOVE_KNOCK_OFF, MOVE_REVENGE, MOVE_BULK_UP}
     },
     {
     .iv = 100,
-    .lvl = 16,
+    .lvl = 17,
     .species = SPECIES_MEDITITE,
     .heldItem = ITEM_NONE,
-    .moves = {MOVE_FOCUS_PUNCH, MOVE_LIGHT_SCREEN, MOVE_REFLECT, MOVE_BULK_UP}
+    .moves = {MOVE_FOCUS_PUNCH, MOVE_SUBSTITUTE, MOVE_THUNDER_PUNCH, MOVE_BULK_UP}
     },
     {
     .iv = 200,
-    .lvl = 19,
+    .lvl = 18,
     .species = SPECIES_MAKUHITA,
     .heldItem = ITEM_SITRUS_BERRY,
-    .moves = {MOVE_ARM_THRUST, MOVE_VITAL_THROW, MOVE_REVERSAL, MOVE_BULK_UP}
+    .moves = {MOVE_SMELLING_SALT, MOVE_VITAL_THROW, MOVE_REVERSAL, MOVE_BULK_UP}
     }
 };
 

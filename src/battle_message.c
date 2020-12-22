@@ -282,6 +282,7 @@ static const u8 sText_PkmnPreventsConfusionWith[] = _("{B_DEF_NAME_WITH_PREFIX}'
 static const u8 sText_PkmnRaisedFirePowerWith[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}\nraised its FIRE power!");
 static const u8 sText_PkmnAnchorsItselfWith[] = _("{B_DEF_NAME_WITH_PREFIX} anchors\nitself with {B_DEF_ABILITY}!");
 static const u8 sText_PkmnCutsAttackWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncuts {B_DEF_NAME_WITH_PREFIX}'s ATTACK!");
+static const u8 sText_PkmnCutsSpAtkWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncuts {B_DEF_NAME_WITH_PREFIX}'s SPECIAL ATTACK!");
 static const u8 sText_PkmnPreventsStatLossWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nprevents stat loss!");
 static const u8 sText_PkmnHurtsWith[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt by\n{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 static const u8 sText_PkmnTraced[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} TRACED\n{B_BUFF1}'s {B_BUFF2}!");
@@ -685,6 +686,11 @@ static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} 
 static const u8 sText_AuraBreakActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} reversed all\nother POKéMON's auras!");
 static const u8 sText_ComatoseActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is drowsing!");
 static const u8 sText_ScreenCleanerActivates[] = _("All screens on the field were\ncleansed!");
+static const u8 sText_StormcallerThunderstorm[] = _("A storm is approaching!");
+static const u8 sText_StartedStorm[] = _("A thunderstorm brewed!");
+static const u8 sText_StormContinues[] = _("The storm rages on.");
+static const u8 sText_StormStopped[] = _("The storm calmed.");
+static const u8 sText_PkmnStruckByThunder[] = _("{B_ATK_NAME_WITH_PREFIX} is struck\nby lightning!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -911,6 +917,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNRAISEDFIREPOWERWITH - 12] = sText_PkmnRaisedFirePowerWith,
     [STRINGID_PKMNANCHORSITSELFWITH - 12] = sText_PkmnAnchorsItselfWith,
     [STRINGID_PKMNCUTSATTACKWITH - 12] = sText_PkmnCutsAttackWith,
+    [STRINGID_PKMNCUTSSPATKWITH - 12] = sText_PkmnCutsSpAtkWith,
     [STRINGID_PKMNPREVENTSSTATLOSSWITH - 12] = sText_PkmnPreventsStatLossWith,
     [STRINGID_PKMNHURTSWITH - 12] = sText_PkmnHurtsWith,
     [STRINGID_PKMNTRACED - 12] = sText_PkmnTraced,
@@ -1233,6 +1240,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_AURABREAKENTERS - 12] = sText_AuraBreakActivates,
     [STRINGID_COMATOSEENTERS - 12] = sText_ComatoseActivates,
     [STRINGID_SCREENCLEANERENTERS - 12] = sText_ScreenCleanerActivates,
+    [STRINGID_STORMCALLERTHUNDERSTORM - 12] = sText_StormcallerThunderstorm,
+    [STRINGID_STARTEDSTORM - 12] = sText_StartedStorm,
+    [STRINGID_STORMCONTINUES - 12] = sText_StormContinues,
+    [STRINGID_STORMSTOPPED - 12] = sText_StormStopped,
+    [STRINGID_PKMNSTRUCKBYTHUNDER - 12] = sText_PkmnStruckByThunder
 };
 
 const u16 gTerrainStringIds[] =
@@ -1293,22 +1305,23 @@ const u16 gNoEscapeStringIds[] =
 const u16 gMoveWeatherChangeStringIds[] =
 {
     STRINGID_STARTEDTORAIN, STRINGID_DOWNPOURSTARTED, STRINGID_BUTITFAILED,
-    STRINGID_SANDSTORMBREWED, STRINGID_SUNLIGHTGOTBRIGHT, STRINGID_STARTEDHAIL
+    STRINGID_SANDSTORMBREWED, STRINGID_SUNLIGHTGOTBRIGHT, STRINGID_STARTEDHAIL,
+    STRINGID_STARTEDSTORM
 };
 
 const u16 gSandStormHailContinuesStringIds[] =
 {
-    STRINGID_SANDSTORMRAGES, STRINGID_HAILCONTINUES
+    STRINGID_SANDSTORMRAGES, STRINGID_HAILCONTINUES, STRINGID_STORMCONTINUES
 };
 
 const u16 gSandStormHailDmgStringIds[] =
 {
-    STRINGID_PKMNBUFFETEDBYSANDSTORM, STRINGID_PKMNPELTEDBYHAIL
+    STRINGID_PKMNBUFFETEDBYSANDSTORM, STRINGID_PKMNPELTEDBYHAIL, STRINGID_PKMNSTRUCKBYTHUNDER
 };
 
 const u16 gSandStormHailEndStringIds[] =
 {
-    STRINGID_SANDSTORMSUBSIDED, STRINGID_HAILSTOPPED
+    STRINGID_SANDSTORMSUBSIDED, STRINGID_HAILSTOPPED, STRINGID_STORMSTOPPED
 };
 
 const u16 gRainContinuesStringIds[] =
@@ -1497,7 +1510,7 @@ const u16 gWeatherStartsStringIds[] =
     [WEATHER_SUNNY]              = STRINGID_ITISRAINING,
     [WEATHER_RAIN]               = STRINGID_ITISRAINING,
     [WEATHER_SNOW]               = STRINGID_ITISRAINING,
-    [WEATHER_RAIN_THUNDERSTORM]  = STRINGID_ITISRAINING,
+    [WEATHER_RAIN_THUNDERSTORM]  = STRINGID_STORMCONTINUES,
     [WEATHER_FOG_HORIZONTAL]     = STRINGID_ITISRAINING,
     [WEATHER_VOLCANIC_ASH]       = STRINGID_ITISRAINING,
     [WEATHER_SANDSTORM]          = STRINGID_SANDSTORMISRAGING,

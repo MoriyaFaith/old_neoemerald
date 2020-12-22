@@ -189,15 +189,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGSROCK_AFFECTED,
         #endif
-        .effect = EFFECT_TWO_TURNS_ATTACK,
-        .power = 80,
-        .type = TYPE_NORMAL,
+        .effect = EFFECT_HIT,
+        .power = 90,
+        .type = TYPE_FLYING,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
-        .split = SPLIT_SPECIAL,
+        .split = SPLIT_PHYSICAL,
     },
 
     [MOVE_SWORDS_DANCE] =
@@ -2382,13 +2382,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
             .power = 100,
-            .accuracy = 90,
+            .accuracy = 100,
         #elif B_UPDATED_MOVE_DATA == GEN_5
             .power = 90,
-            .accuracy = 90,
+            .accuracy = 100,
         #else
             .power = 90,
-            .accuracy = 85,
+            .accuracy = 100,
         #endif
         .effect = EFFECT_HIT,
         .type = TYPE_WATER,
@@ -2459,9 +2459,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROCK_SLIDE] =
     {
         .effect = EFFECT_FLINCH_HIT,
-        .power = 75,
+        .power = 80,
         .type = TYPE_ROCK,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_BOTH,
@@ -2608,7 +2608,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TRIPLE_KICK] =
     {
         .effect = EFFECT_TRIPLE_KICK,
-        .power = 10,
+        .power = 15,
         .type = TYPE_FIGHTING,
         .accuracy = 90,
         .pp = 10,
@@ -3637,9 +3637,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_METAL_CLAW] =
     {
         .effect = EFFECT_ATTACK_UP_HIT,
-        .power = 50,
+        .power = 60,
         .type = TYPE_STEEL,
-        .accuracy = 95,
+        .accuracy = 100,
         .pp = 35,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
@@ -3909,9 +3909,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROCK_SMASH] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_4
-            .power = 40,
+            .power = 60,
         #else
-            .power = 20,
+            .power = 60,
         #endif
         .effect = EFFECT_DEFENSE_DOWN_HIT,
         .type = TYPE_FIGHTING,

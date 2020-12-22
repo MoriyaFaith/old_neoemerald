@@ -6800,6 +6800,50 @@ BattleScript_IntimidatePrevented:
 	call BattleScript_TryAdrenalineOrb
 	goto BattleScript_IntimidateActivatesLoopIncrement
 
+BattleScript_PetrifyActivatesEnd3::
+	call BattleScript_PausePetrifyActivates
+	end3
+
+BattleScript_PausePetrifyActivates:
+	pause 0x20
+BattleScript_PetrifyActivates::
+	setbyte gBattlerTarget, 0x0
+	call BattleScript_AbilityPopUp
+BattleScript_PetrifyActivatesLoop:
+	setstatchanger STAT_SPATK, 1, TRUE
+	trygetintimidatetarget BattleScript_PetrifyActivatesReturn
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_PetrifyActivatesLoopIncrement
+	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_PetrifyPrevented
+	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_PetrifyPrevented
+	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE, BattleScript_PetrifyPrevented
+#if B_UPDATED_INTIMIDATE >= GEN_8
+	jumpifability BS_TARGET, ABILITY_INNER_FOCUS, BattleScript_PetrifyPrevented
+	jumpifability BS_TARGET, ABILITY_SCRAPPY, BattleScript_PetrifyPrevented
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_PetrifyPrevented
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_PetrifyPrevented
+#endif
+	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED | STAT_BUFF_ALLOW_PTR, BattleScript_PetrifyActivatesLoopIncrement
+	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 0x1, BattleScript_PetrifyActivatesLoopIncrement
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_PKMNCUTSSPATKWITH
+	waitmessage 0x40
+	call BattleScript_TryAdrenalineOrb
+BattleScript_PetrifyActivatesLoopIncrement:
+	addbyte gBattlerTarget, 0x1
+	goto BattleScript_PetrifyActivatesLoop
+BattleScript_PetrifyActivatesReturn:
+	return
+BattleScript_PetrifyPrevented:
+	pause 0x20
+	call BattleScript_AbilityPopUp
+	setbyte gBattleCommunication STAT_ATK
+	stattextbuffer BS_ATTACKER
+	printstring STRINGID_STATWASNOTLOWERED
+	waitmessage 0x40
+	call BattleScript_TryAdrenalineOrb
+	goto BattleScript_PetrifyActivatesLoopIncrement
+
 BattleScript_DroughtActivates::
 	pause 0x20
 	call BattleScript_AbilityPopUp
@@ -6815,6 +6859,15 @@ BattleScript_SnowWarningActivates::
 	printstring STRINGID_SNOWWARNINGHAIL
 	waitstate
 	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_WeatherFormChanges
+	end3
+
+BattleScript_StormcallerActivates::
+	pause 0x20
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_STORMCALLERTHUNDERSTORM
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_STORM_CONTINUES, NULL
 	call BattleScript_WeatherFormChanges
 	end3
 

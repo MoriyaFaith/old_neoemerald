@@ -1627,6 +1627,7 @@ enum
     ENDTURN_SANDSTORM,
     ENDTURN_SUN,
     ENDTURN_HAIL,
+    ENDTURN_THUNDERSTORM,
     ENDTURN_GRAVITY,
     ENDTURN_WATER_SPORT,
     ENDTURN_MUD_SPORT,
@@ -1955,6 +1956,26 @@ u8 DoFieldEndTurnEffects(void)
 
                 gBattleScripting.animArg1 = B_ANIM_HAIL_CONTINUES;
                 gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                BattleScriptExecute(gBattlescriptCurrInstr);
+                effect++;
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
+        case ENDTURN_THUNDERSTORM:
+            if (gBattleWeather & WEATHER_THUNDERSTORM_ANY)
+            {
+                if (!(gBattleWeather & WEATHER_THUNDERSTORM_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
+                {
+                    gBattleWeather &= ~WEATHER_THUNDERSTORM_TEMPORARY;
+                    gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
+                }
+
+                gBattleScripting.animArg1 = B_ANIM_STORM_CONTINUES;
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 BattleScriptExecute(gBattlescriptCurrInstr);
                 effect++;
             }
@@ -3425,6 +3446,7 @@ static const u16 sWeatherFlagsInfo[][3] =
     [ENUM_WEATHER_SUN] = {WEATHER_SUN_TEMPORARY, WEATHER_SUN_PERMANENT, HOLD_EFFECT_HEAT_ROCK},
     [ENUM_WEATHER_SANDSTORM] = {WEATHER_SANDSTORM_TEMPORARY, WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
     [ENUM_WEATHER_HAIL] = {WEATHER_HAIL_TEMPORARY, WEATHER_HAIL_PERMANENT, HOLD_EFFECT_ICY_ROCK},
+    [ENUM_WEATHER_THUNDERSTORM] = {WEATHER_THUNDERSTORM_TEMPORARY, WEATHER_THUNDERSTORM_PERMANENT},
 };
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
@@ -3608,7 +3630,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 switch (GetCurrentWeather())
                 {
                 case WEATHER_RAIN:
-                case WEATHER_RAIN_THUNDERSTORM:
                 case WEATHER_DOWNPOUR:
                     if (!(gBattleWeather & WEATHER_RAIN_ANY))
                     {
@@ -3630,6 +3651,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
                         gBattleScripting.animArg1 = B_ANIM_SUN_CONTINUES;
+                        effect++;
+                    }
+                    break;
+                case WEATHER_RAIN_THUNDERSTORM:
+                    if (!(gBattleWeather & WEATHER_THUNDERSTORM_ANY))
+                    {
+                        gBattleWeather = (WEATHER_THUNDERSTORM_PERMANENT | WEATHER_THUNDERSTORM_TEMPORARY);
+                        gBattleScripting.animArg1 = B_ANIM_STORM_CONTINUES;
                         effect++;
                     }
                     break;
@@ -3866,6 +3895,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
+        case ABILITY_STORMCALLER:
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_THUNDERSTORM, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_StormcallerActivates);
+                effect++;
+            }
+            break;
         case ABILITY_ELECTRIC_SURGE:
             if (TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.electricTerrainTimer))
             {
@@ -3895,6 +3931,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITY_INTIMIDATE:
+            if (!(gSpecialStatuses[battler].intimidatedMon))
+            {
+                gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_INTIMIDATED;
+                gSpecialStatuses[battler].intimidatedMon = 1;
+            }
+            break;
+        case ABILITY_PETRIFY:
             if (!(gSpecialStatuses[battler].intimidatedMon))
             {
                 gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_INTIMIDATED;
@@ -4801,6 +4844,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
+                }
+                battler = gBattlerAbility = gBattleStruct->intimidateBattler = i;
+                effect++;
+                break;
+            }
+            if (gBattleMons[i].ability == ABILITY_PETRIFY && gBattleResources->flags->flags[i] & RESOURCE_FLAG_INTIMIDATED)
+            {
+                gLastUsedAbility = ABILITY_PETRIFY;
+                gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_INTIMIDATED);
+                if (caseID == ABILITYEFFECT_INTIMIDATE1)
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_PetrifyActivatesEnd3);
+                }
+                else
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_PetrifyActivates;
                 }
                 battler = gBattlerAbility = gBattleStruct->intimidateBattler = i;
                 effect++;
