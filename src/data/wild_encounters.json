@@ -129,7 +129,7 @@
               },
               {
                 "min_level": 2,
-                "max_level": 1,
+                "max_level": 2,
                 "species": "SPECIES_ZIGZAGOON"
               },
               {
@@ -1365,7 +1365,7 @@
               {
                 "min_level": 6,
                 "max_level": 6,
-                "species": "SPECIES_POOCHYENA"
+                "species": "SPECIES_RAIKOU"
               },
               {
                 "min_level": 6,
