@@ -6687,6 +6687,7 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         if (moveType == TYPE_STEEL || moveType == TYPE_ROCK || moveType == TYPE_GROUND)
            MulModifier(&modifier, UQ_4_12(1.3));
         break;
+        break;
     case ABILITY_RIVALRY:
         if (GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality) != MON_GENDERLESS
             && GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality) != MON_GENDERLESS)
@@ -7226,6 +7227,12 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_ROCK) && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY && !usesDefStat)
         MulModifier(&modifier, UQ_4_12(1.5));
 
+    if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_ELECTRIC) && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_THUNDERSTORM_ANY && usesDefStat)
+        MulModifier(&modifier, UQ_4_12(1.5));
+
+    if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_STEEL) && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_THUNDERSTORM_ANY && usesDefStat)
+        MulModifier(&modifier, UQ_4_12(1.5));
+
     // The defensive stats of a Player's Pokémon are boosted by x1.1 (+10%) if they have the 5th badge and 7th badges.
     // Having the 5th badge boosts physical defense while having the 7th badge boosts special defense.
     if (ShouldGetStatBadgeBoost(FLAG_BADGE05_GET, battlerDef) && IS_MOVE_PHYSICAL(move))
@@ -7564,6 +7571,53 @@ u16 GetTypeModifier(u8 atkType, u8 defType)
         return sInverseTypeEffectivenessTable[atkType][defType];
     else
         return sTypeEffectivenessTable[atkType][defType];
+}
+
+s32 GetThunderstormDamage(u8 damageType, u8 battlerId)
+{
+    u8 type1 = gBattleMons[battlerId].type1;
+    u8 type2 = gBattleMons[battlerId].type2;
+    u32 maxHp = gBattleMons[battlerId].maxHP;
+    s32 dmg = 0;
+    u16 modifier = UQ_4_12(1.0);
+
+    MulModifier(&modifier, GetTypeModifier(damageType, type1));
+    if (type2 != type1)
+        MulModifier(&modifier, GetTypeModifier(damageType, type2));
+
+    switch (modifier)
+    {
+    case UQ_4_12(0.0):
+        dmg = 0;
+        break;
+    case UQ_4_12(0.25):
+        dmg = maxHp / 64;
+        if (dmg == 0)
+            dmg = 1;
+        break;
+    case UQ_4_12(0.5):
+        dmg = maxHp / 32;
+        if (dmg == 0)
+            dmg = 1;
+        break;
+    case UQ_4_12(1.0):
+        dmg = maxHp / 16;
+        if (dmg == 0)
+            dmg = 1;
+        break;
+    case UQ_4_12(2.0):
+        dmg = maxHp / 8;
+        if (dmg == 0)
+            dmg = 1;
+        break;
+    case UQ_4_12(4.0):
+        dmg = maxHp / 4;
+        if (dmg == 0)
+            dmg = 1;
+        break;
+    }
+
+    return dmg;
 }
 
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId)

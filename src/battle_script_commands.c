@@ -1481,7 +1481,7 @@ static bool32 AccuracyCalcHelper(u16 move)
     }
 
     if ((WEATHER_HAS_EFFECT &&
-            (((gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+            (((gBattleWeather & WEATHER_RAIN_ANY || gBattleWeather & WEATHER_THUNDERSTORM_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
          || (((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD))))
      || (gBattleMoves[move].effect == EFFECT_VITAL_THROW)
      || (gBattleMoves[move].accuracy == 0)
@@ -9574,16 +9574,16 @@ static void Cmd_weatherdamage(void)
         {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ELECTRIC)
                 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+                && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
+                && ability != ABILITY_STORMCALLER
                 && ability != ABILITY_LIGHTNING_ROD
                 && ability != ABILITY_MOTOR_DRIVE
-                && ability != ABILITY_STATIC
                 && ability != ABILITY_VOLT_ABSORB
+                && ability != ABILITY_OVERCOAT
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOOGLES)
             {
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
+                gBattleMoveDamage = GetThunderstormDamage(TYPE_ELECTRIC, gBattlerAttacker);
             }
         }
     }
